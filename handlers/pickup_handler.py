@@ -5,7 +5,7 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import Message, CallbackQuery
 from keyboards.inline_keyboards.pickup_kb import build_first_kb, PickupCbData, CourierActions, build_second_kb, \
     build_third_kb, build_fourth_kb
-from bot import bot
+
 
 router = Router(name=__name__)
 
@@ -20,6 +20,7 @@ class DB:
 
 @router.message(CommandStart())
 async def process_start_command(message: Message, state: FSMContext):
+    print(message.chat.id)
     await message.answer('Enter your token', parse_mode="HTML")
     await state.set_state(RegisterMessages.userToken)
 
@@ -34,9 +35,8 @@ async def extract_data(message: Message, state: FSMContext):
     )
 
 
-@router.message()
-async def processing_auto_message(msg: Message):
-    await bot.send_message(msg.chat.id, 'hi banshee')
+
+
 
 
 @router.callback_query(
