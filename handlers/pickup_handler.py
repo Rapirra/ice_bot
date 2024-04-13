@@ -1,25 +1,19 @@
-from aiogram import Router, F, html
-from aiogram.filters import CommandStart, CommandObject, Command, StateFilter
+from aiogram import Router, F
+from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import Message, CallbackQuery
+
 from keyboards.inline_keyboards.pickup_kb import build_first_kb, PickupCbData, CourierActions, build_second_kb, \
     build_third_kb, build_fourth_kb
-from bot import bot
+from models.auth import client
+from models.order import query
 
 router = Router(name=__name__)
 
 
-class RegisterMessages(StatesGroup):
-    userToken = State()
-
-
-class DB:
-    answer_data = {}
-
-
 @router.message(CommandStart())
 async def process_start_command(message: Message, state: FSMContext):
+    print(message.chat.id)
     await message.answer('Enter your token', parse_mode="HTML")
     await state.set_state(RegisterMessages.userToken)
 
@@ -32,11 +26,13 @@ async def extract_data(message: Message, state: FSMContext):
     await message.answer(
         text=f"Your token {user_data['userToken']}."
     )
+    await state.set_state(SubscriptionStates.sendingResponse)
 
 
-@router.message()
-async def processing_auto_message(msg: Message):
-    await bot.send_message(msg.chat.id, 'hi banshee')
+@router.message(RegisterMessages.userToken, F.text)
+async def make_async_request(message: Message, state: FSMContext):
+    data = await client.execute_async(query=query)
+    await state.update_data(subscription_data=data)
 
 
 @router.callback_query(
