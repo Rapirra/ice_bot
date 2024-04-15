@@ -1,6 +1,5 @@
 from aiogram.fsm.state import StatesGroup, State
 
-
 class BotMessage:
     userToken = None
     objectMessage = None
@@ -31,8 +30,5 @@ class SubscriptionStates(StatesGroup):
 botMessage = BotMessage()
 
 
-async def processing_auto_message(chat_id, bot, bm):
-    if bm.objectMessage:
-        await bot.send_message(chat_id, f"hi banshee: {bm.objectMessage}")
-    else:
-        print("User token is empty. Cannot initialize GraphqlClient. Banshee i am here")
+
+

@@ -1,10 +1,11 @@
 from aiogram import Router, F
 from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, CallbackQuery
-from classesStructure.classStructures import botMessage, RegisterMessage, SubscriptionStates
+from aiogram.types import Message
+
+from classesStructure.classStructures import botMessage, RegisterMessage
 from models.auth import client, initializeGraphql
-from models.order import query
+from bot import bot, chat_id
 
 router = Router(name=__name__)
 
@@ -19,25 +20,16 @@ async def process_start_command(message: Message, state: FSMContext):
 async def extract_data(message: Message, state: FSMContext):
     await state.update_data(userToken=message.text)
     user_data = await state.get_data()
-
-    print('user_data',user_data)
     if user_data:
         botMessage.addUserToken(message.text)
     await message.answer(
         text=f"Your token {user_data['userToken']}."
     )
     if botMessage.userToken:
-        initializeGraphql(botMessage.userToken)
+        await initializeGraphql(botMessage.userToken)
 
 
-@router.message()
-async def make_async_request(message: Message, state: FSMContext):
 
-    print('client', client)
-    data = await client.execute_async(query=query)
-    await state.update_data(subscription_data=data)
-    await botMessage.addObjMessage(data)
-    print(data, 'botMessage.objectMessage')
 
 # @router.callback_query(
 #     PickupCbData.filter(F.action == CourierActions.accept)
