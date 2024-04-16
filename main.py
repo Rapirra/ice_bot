@@ -1,9 +1,7 @@
 import asyncio
 
 from bot import dispatcher as dp, bot
-from classesStructure.classStructures import botMessage
 from handlers import router
-from models.auth import callBot
 
 
 async def main():

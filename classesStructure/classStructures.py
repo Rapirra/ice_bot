@@ -4,15 +4,14 @@ class BotMessage:
     userToken = ''
     objectMessage = {}
     logic = False
+    deliveryBtns = None
 
     def addUserToken(self, userToken):
         self.userToken = userToken
 
     def addObjMessage(self, objectMessage):
-        print('objectMessage')
         self.objectMessage = objectMessage
         self.logic = True
-        print('objectMessage', objectMessage)
 
     def get_obj(self):
         var = self.objectMessage
