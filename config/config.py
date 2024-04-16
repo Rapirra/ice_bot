@@ -7,10 +7,9 @@ from environs import Env
 @dataclass
 class Config:
     tg_bot: str
-    chatId: str
 
 
 def load_config(path: str | None = None) -> Config:
     env = Env()
     env.read_env(path)
-    return Config(tg_bot=env('API_TOKEN'), chatId=env('CHAT_ID'))
+    return Config(tg_bot=env('API_TOKEN'))
