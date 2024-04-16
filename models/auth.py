@@ -56,7 +56,15 @@ async def listen_for_orders(transport, chatId):
         )
         async for result in session.subscribe(subscription):
             await bot.send_message(chat_id='1092777329', text='hi banshee')
-            text_msg = json.dumps(result['displayOrderToBot'])
+
+            order_info = result['displayOrderToBot']
+            order_id = order_info['id']
+            order_name = order_info['name']
+            client_name = order_info['client']['name']
+            status_name = order_info['status']['name']
+
+            text_msg = f"Order ID: {order_id}\nOrder Name: {order_name}\nClient: {client_name}\nStatus: {status_name}"
+
             if botMessage is not None:
                 setattr(botMessage, 'objectMessage', text_msg)
                 await callBot(text_msg, chatId)
