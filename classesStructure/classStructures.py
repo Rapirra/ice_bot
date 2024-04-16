@@ -1,15 +1,22 @@
 from aiogram.fsm.state import StatesGroup, State
 
 class BotMessage:
-    userToken = None
-    objectMessage = None
+    userToken = ''
+    objectMessage = {}
+    logic = False
 
     def addUserToken(self, userToken):
         self.userToken = userToken
 
     def addObjMessage(self, objectMessage):
+        print('objectMessage')
         self.objectMessage = objectMessage
-        print(self.objectMessage)
+        self.logic = True
+        print('objectMessage', objectMessage)
+
+    def get_obj(self):
+        var = self.objectMessage
+
 
     async def send_message_if_token_exists(self, bot):
         if self.userToken:
