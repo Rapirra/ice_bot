@@ -18,7 +18,7 @@ async def save_btn_action(user_token, btn_event):
         mutation = gql(btnMutation)
         params = {
             'order': btn_event['order'],
-            'button': btn_event['button']
+            'button': int(btn_event['button'])
         }
 
         result = await session.execute(mutation, variable_values=params)

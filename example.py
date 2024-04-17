@@ -6,7 +6,6 @@ from aiogram.types import Message, CallbackQuery, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from bot import dispatcher as dp, bot
-from keyboards.keyboards import links_kb, first
 
 router = Router()
 
