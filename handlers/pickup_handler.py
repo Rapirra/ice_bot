@@ -30,53 +30,18 @@ async def extract_data(message: Message, state: FSMContext):
 
 
 @router.callback_query(
-    PickupCbData.filter(F.action.in_({'accept', '1', '2'}))
+    PickupCbData.filter(F.action.in_({'accept', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'}))
 )
 async def process_second_kb(call: CallbackQuery):
+    print('call.data', call.data)
     await save_btn_action(botMessage.user_token, {
         'order': 8,
-        'button': 1
+        'button': call.data.id
     })
     print('data', botMessage.deliveryBtns)
     await call.answer()
-    await call.message.answer(
+    await call.message.edit_reply_markup(
         text="Your shop actions:",
         reply_markup=build_first_kb(botMessage.deliveryBtns)
     )
 
-@router.callback_query(
-    PickupCbData.filter(F.action.in_({'accept', '10', '2'}))
-)
-async def process_second_kb(call: CallbackQuery):
-    await save_btn_action(botMessage.user_token, {
-        'order': 8,
-        'button': 1
-    })
-    print('data', botMessage.deliveryBtns)
-    await call.answer()
-    await call.message.answer(
-        text="Your shop actions:",
-        reply_markup=build_first_kb(botMessage.deliveryBtns)
-    )
-
-
-@router.callback_query(
-    PickupCbData.filter(F.action == CourierActions.second)
-)
-async def process_third_kb(call: CallbackQuery):
-    await call.answer()
-    await call.message.answer(
-        text="Your shop actions:",
-        reply_markup=build_third_kb(),
-    )
-
-
-@router.callback_query(
-    PickupCbData.filter(F.action == CourierActions.third)
-)
-async def process_fourth_kb(call: CallbackQuery):
-    await call.answer()
-    await call.message.answer(
-        text="Your shop actions:",
-        reply_markup=build_fourth_kb(),
-    )
