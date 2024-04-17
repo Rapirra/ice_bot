@@ -5,13 +5,14 @@ from models.resolvers.orders_resolver import listen_for_orders
 client = None
 
 
-async def initializeGraphql(userToken, chatId):
-    if userToken:
+
+async def initializeGraphql(user_token, chatId):
+    if user_token:
         transport = WebsocketsTransport(
             # url='wss://api.iceberg-crm.kz/graphql',
             url='ws://localhost/graphql',
             init_payload={
-                'Authorization': userToken
+                'Authorization': user_token
             },
             keep_alive_timeout=600,
             ping_interval=60,

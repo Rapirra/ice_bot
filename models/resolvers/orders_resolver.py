@@ -30,5 +30,5 @@ async def listen_for_orders(transport, chatId):
             if botMessage is not None:
                 setattr(botMessage, 'objectMessage', text_msg)
                 setattr(botMessage, 'deliveryBtns', result['displayOrderToBot']['deliveryBtns'])
-                print('botMessage.deliveryBtns', botMessage.deliveryBtns)
+                # print('botMessage.deliveryBtns', botMessage.deliveryBtns)
                 await callBot(text_msg, chatId)
