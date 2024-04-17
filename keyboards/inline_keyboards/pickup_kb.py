@@ -18,7 +18,7 @@ class CourierActions(Enum):
 
 
 class PickupCbData(CallbackData, prefix="pickup"):
-    action: CourierActions
+    action: str
 
 
 thirdBtn = InlineKeyboardButton(text='Next',
@@ -62,7 +62,7 @@ def build_first_kb(obj) -> InlineKeyboardMarkup:
         call_back = event_value if event_value is not None else 'accept'
         builder.add(InlineKeyboardButton(
             text=btn_text,
-            callback_data=PickupCbData(action=CourierActions(call_back)).pack()
+            callback_data=PickupCbData(action=call_back).pack()
         ))
 
     return builder.as_markup()

@@ -1,6 +1,7 @@
 from gql import Client, gql
 from gql.transport.aiohttp import AIOHTTPTransport
 
+from classesStructure.classStructures import botMessage
 from models.queries.queries import btnMutation
 
 
@@ -21,4 +22,5 @@ async def save_btn_action(user_token, btn_event):
         }
 
         result = await session.execute(mutation, variable_values=params)
-        print(result)
+        setattr(botMessage, 'deliveryBtns', result['deliveryButton'])
+        print('result', result)

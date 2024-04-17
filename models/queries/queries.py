@@ -1,5 +1,5 @@
 subQuery = """
-    subscription Subscription {
+           subscription Subscription {
   displayOrderToBot {
     deliveryBtns {
       id
@@ -9,7 +9,6 @@ subQuery = """
         type
         event
         color
-        key
       }
       comment
       score
@@ -36,17 +35,24 @@ subQuery = """
       }
     }
   }
-}
-"""
+}"""
 
 btnMutation = """
 mutation DeliveryButton($order: Float, $button: Float) {
   deliveryButton(order: $order, button: $button) {
     id
+    static
+    button {
+      id
+      type
       event
+      key
       color
-    key
+    }
+    comment
+    score
     type
+    parent
   }
 }
 """
