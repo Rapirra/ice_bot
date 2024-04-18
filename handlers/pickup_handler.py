@@ -22,7 +22,7 @@ async def process_start_command(message: Message, state: FSMContext):
 async def extract_data(message: Message, state: FSMContext):
     await state.update_data(user_token=message.text)
     user_data = await state.get_data()
-    await state.set_state(RegisterMessage.comment_response)
+    await state.set_state(RegisterMessage.comment_request)
     if user_data:
         botMessage.adduser_token(message.text)
     await message.answer('Successfully authorized, hi Banshee')
@@ -44,18 +44,21 @@ async def process_second_kb(call: CallbackQuery, callback_data: PickupCbData):
 
 
 @router.callback_query(PickupCbData.filter(F.action.in_({'5', '7', '8', '9', '10', '11'})),
-                       RegisterMessage.comment_response)
+                       RegisterMessage.comment_request)
 async def process_comment_kb(call: CallbackQuery, callback_data: PickupCbData, state: FSMContext):
-    await state.update_data(comment_msg_id=call.message.message_id)
+    await state.update_data(comment_request_msg_id=call.message.message_id)
+    await state.set_state(RegisterMessage.comment_handle)
     await save_btn_action(botMessage.user_token, {
         'order': botMessage.objectMessage['id'],
         'button': callback_data.call_back
     })
-    await call.message.answer('Enter your comment to order')
-    await state.set_state(RegisterMessage.comment_handle)
+
+    sent_message = await call.message.answer('Enter your comment to order')
+    await state.update_data(comment_handle_msg_id=sent_message.message_id)
+    await state.set_state(RegisterMessage.comment_text)
 
 
-@router.message(RegisterMessage.comment_handle)
+@router.message(RegisterMessage.comment_text)
 async def process_comment_kb(message: Message, state: FSMContext):
     msg_id = await state.get_data()
     if message.text:
@@ -63,6 +66,6 @@ async def process_comment_kb(message: Message, state: FSMContext):
             'object': botMessage.objectMessage['id'],
             'comment': message.text
         })
-        await message.answer('Comment was sent Banshee')
-        await bot.delete_message(chat_id=message.chat.id, message_id=msg_id['comment_msg_id'])
+        await bot.delete_message(chat_id=message.chat.id, message_id=msg_id['comment_request_msg_id'])
+        await bot.delete_message(chat_id=message.chat.id, message_id=msg_id['comment_handle_msg_id'])
         await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)

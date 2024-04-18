@@ -24,7 +24,6 @@ async def save_btn_action(user_token, btn_event):
         result = await session.execute(mutation, variable_values=params)
         btns = result['deliveryButton']
         botMessage.add_delivery_btns(btns)
-        # setattr(botMessage, 'deliveryBtns', result['deliveryButton'])
 
 
 async def save_comment_action(user_token, btn_event):

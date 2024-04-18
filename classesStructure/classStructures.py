@@ -19,7 +19,8 @@ class BotMessage:
 class RegisterMessage(StatesGroup):
     user_token = State()
     chat_id = State()
-    comment_response = State()
+    comment_request = State()
+    comment_text = State()
     comment_handle = State()
 
 

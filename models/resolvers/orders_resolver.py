@@ -15,7 +15,6 @@ async def listen_for_orders(transport, chatId):
             subQuery
         )
         async for result in session.subscribe(subscription):
-            await bot.send_message(chat_id='1092777329', text='hi banshee')
 
             order_info = result['displayOrderToBot']['order']
             order_id = order_info['id']
