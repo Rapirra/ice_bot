@@ -29,34 +29,12 @@ async def extract_data(message: Message, state: FSMContext):
         await initializeGraphql(botMessage.user_token, message.chat.id)
 
 
-@router.message(RegisterMessage.comment_response, F.data.in_({'comment'}))
-async def process_comment(msg: Message, state: FSMContext):
-    print('call.message.text', msg.text)
-    await state.update_data(comment_msg=msg.text)
-    await msg.answer('Comment section')
-    await save_comment_action(botMessage.user_token, {
-        'object': botMessage.objectMessage['id'],
-        'comment': msg.text
-    })
-    print('data', botMessage.deliveryBtns)
-
-
-@router.callback_query(
-    PickupCbData.filter(F.action.in_({'1', '2',
-                                      '3',
-                                      '4',
-                                      '6'}))
-)
+@router.callback_query(PickupCbData.filter(F.action.in_({'1', '2', '3', '4', '6'})))
 async def process_second_kb(call: CallbackQuery, callback_data: PickupCbData):
-    print('call.data', call.data)
-    print('hjvjb', botMessage.objectMessage)
-    print('PickupCbData', callback_data.call_back)
-
     await save_btn_action(botMessage.user_token, {
         'order': botMessage.objectMessage['id'],
         'button': callback_data.call_back
     })
-    print('data', botMessage.deliveryBtns)
     await call.answer()
     await call.message.edit_reply_markup(
         text="Your shop actions:",
@@ -65,18 +43,20 @@ async def process_second_kb(call: CallbackQuery, callback_data: PickupCbData):
 
 
 @router.callback_query(
-    PickupCbData.filter(F.action.in_({
-        '5',
-        '7',
-        '8',
-        '9',
-        '10', '11'}))
+    PickupCbData.filter(F.action.in_({'5', '7', '8', '9', '10', '11'}))
+    or RegisterMessage.comment_response, F.data.in_({'comment'})
 )
-async def process_comment_kb(call: CallbackQuery, callback_data: PickupCbData):
-    print('call.message.text', call.message.text)
+async def process_comment_kb(call: CallbackQuery, callback_data: PickupCbData, state: FSMContext):
+    await state.update_data(comment_msg=call.text)
     await call.answer('Enter your comment to order')
-    await save_comment_action(botMessage.user_token, {
-        'object': botMessage.objectMessage['id'],
-        'comment': call.message.text
-    })
-    print('data', botMessage.deliveryBtns)
+    message = await call.message
+    if message:
+        await save_comment_action(botMessage.user_token, {
+            'object': botMessage.objectMessage['id'],
+            'comment': call.message.text
+        })
+        await call.answer('Comment was send Banshee')
+
+
+
+

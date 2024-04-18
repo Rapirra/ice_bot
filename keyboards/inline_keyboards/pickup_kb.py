@@ -44,6 +44,6 @@ def build_comment_kb() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.add(InlineKeyboardButton(
         text='Enter comment to order',
-        callback_data='comment').pack())
+        callback_data='comment'))
 
     return builder.as_markup()
