@@ -14,10 +14,14 @@ class BotMessage:
         self.objectMessage = objectMessage
         self.logic = True
 
+    def add_delivery_btns(self, delivery_btns):
+        self.deliveryBtns = delivery_btns
+
 
 class RegisterMessage(StatesGroup):
     user_token = State()
     chat_id = State()
+    comment_response = State()
 
 
 class SubscriptionStates(StatesGroup):

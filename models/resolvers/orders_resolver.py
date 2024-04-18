@@ -14,6 +14,7 @@ async def listen_for_orders(transport, chatId):
         subscription = gql(
             subQuery
         )
+        print()
         async for result in session.subscribe(subscription):
             await bot.send_message(chat_id='1092777329', text='hi banshee')
 
@@ -26,9 +27,9 @@ async def listen_for_orders(transport, chatId):
             status_name = order_info['status']['more']['delivery'] if order_info['status']['more'] else 'N/A'
 
             text_msg = f"Order ID: {order_id}\nOrder Name: {order_name}\nClient: {client_name}{client_phone}\nClient Address:{client_address}\nStatus: {status_name}"
-
+            print('result', result['displayOrderToBot']['deliveryBtns'])
             if botMessage is not None:
                 setattr(botMessage, 'objectMessage', result['displayOrderToBot']['order'])
                 setattr(botMessage, 'deliveryBtns', result['displayOrderToBot']['deliveryBtns'])
 
-                await callBot(text_msg, chatId)
+                await callBot(text_msg, chatId, botMessage.deliveryBtns)

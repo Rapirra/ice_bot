@@ -3,17 +3,10 @@ subQuery = """
   displayOrderToBot {
     deliveryBtns {
       id
-      static
-      button {
-        id
-        type
-        event
-        color
-      }
-      comment
-      score
       type
-      parent
+      event
+      key
+      color
     }
     order {
       id
@@ -35,24 +28,25 @@ subQuery = """
       }
     }
   }
-}"""
+}
+"""
 
 btnMutation = """
 mutation DeliveryButton($order: Float, $button: Float) {
   deliveryButton(order: $order, button: $button) {
     id
-    static
-    button {
-      id
       type
       event
       key
       color
-    }
-    comment
-    score
-    type
-    parent
+  }
+}
+"""
+
+commentMutation = """
+mutation Mutation($module: CRMModules, $comment: String, $object: Float) {
+  comment(module: $module, comment: $comment, object: $object) {
+    id
   }
 }
 """
