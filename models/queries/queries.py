@@ -51,6 +51,15 @@ mutation Mutation($module: CRMModules, $comment: String, $object: Float) {
 }
 """
 
+meQuery = """
+query Query {
+  me {
+    name
+    id
+  }
+}
+"""
+
 
 
 

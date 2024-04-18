@@ -36,7 +36,7 @@ def build_first_kb(obj) -> InlineKeyboardMarkup:
             text=btn_text,
             callback_data=PickupCbData(action=call_back, btn_text=btn_text, call_back=call_back).pack()
         ))
-
+        builder.adjust(2)
     return builder.as_markup()
 
 
