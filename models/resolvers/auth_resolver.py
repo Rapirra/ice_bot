@@ -9,7 +9,7 @@ from models.resolvers.orders_resolver import listen_for_orders
 client = None
 
 
-async def initialize_auth(user_token, chat_id):
+async def initialize_auth(user_token):
     if user_token:
         try:
             transport = AIOHTTPTransport(
@@ -34,7 +34,7 @@ async def initialize_auth(user_token, chat_id):
         return "User token is empty"
 
 
-async def initializeGraphql(user_token, chatId):
+async def initialize_graphql(user_token, chat_id):
     if user_token:
         try:
             transport = WebsocketsTransport(
@@ -48,8 +48,7 @@ async def initializeGraphql(user_token, chatId):
             )
             if not transport:
                 return None
-            await listen_for_orders(transport, chatId)
-            return "Initialization successful"
+            await listen_for_orders(transport, chat_id)
         except Exception as e:
             return "Initialization failed by WebsocketsTransport"
     else:

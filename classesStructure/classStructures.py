@@ -22,7 +22,7 @@ class BotMessage:
 
 class RegisterMessage(StatesGroup):
     user_token = State()
-    user_me = State()
+    user_socket_me = State()
     chat_id = State()
     comment_request = State()
     comment_text = State()
