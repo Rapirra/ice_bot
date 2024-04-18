@@ -15,7 +15,6 @@ async def listen_for_orders(transport, chatId):
             subQuery
         )
         async for result in session.subscribe(subscription):
-            await bot.send_message(chat_id='1092777329', text='hi banshee')
 
             order_info = result['displayOrderToBot']['order']
             order_id = order_info['id']
@@ -28,7 +27,7 @@ async def listen_for_orders(transport, chatId):
             text_msg = f"Order ID: {order_id}\nOrder Name: {order_name}\nClient: {client_name}{client_phone}\nClient Address:{client_address}\nStatus: {status_name}"
 
             if botMessage is not None:
-                setattr(botMessage, 'objectMessage', text_msg)
+                setattr(botMessage, 'objectMessage', result['displayOrderToBot']['order'])
                 setattr(botMessage, 'deliveryBtns', result['displayOrderToBot']['deliveryBtns'])
-                # print('botMessage.deliveryBtns', botMessage.deliveryBtns)
-                await callBot(text_msg, chatId)
+
+                await callBot(text_msg, chatId, botMessage.deliveryBtns)
