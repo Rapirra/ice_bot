@@ -3,6 +3,7 @@ from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
+from bot import bot
 from classesStructure.classStructures import botMessage, RegisterMessage
 from keyboards.inline_keyboards.pickup_kb import PickupCbData, build_first_kb
 from models.resolvers.auth_resolver import initializeGraphql
@@ -42,21 +43,26 @@ async def process_second_kb(call: CallbackQuery, callback_data: PickupCbData):
     )
 
 
-@router.callback_query(
-    PickupCbData.filter(F.action.in_({'5', '7', '8', '9', '10', '11'}))
-    or RegisterMessage.comment_response, F.data.in_({'comment'})
-)
+@router.callback_query(PickupCbData.filter(F.action.in_({'5', '7', '8', '9', '10', '11'})),
+                       RegisterMessage.comment_response)
 async def process_comment_kb(call: CallbackQuery, callback_data: PickupCbData, state: FSMContext):
-    await state.update_data(comment_msg=call.text)
-    await call.answer('Enter your comment to order')
-    message = await call.message
-    if message:
+    await state.update_data(comment_msg_id=call.message.message_id)
+    await save_btn_action(botMessage.user_token, {
+        'order': botMessage.objectMessage['id'],
+        'button': callback_data.call_back
+    })
+    await call.message.answer('Enter your comment to order')
+    await state.set_state(RegisterMessage.comment_handle)
+
+
+@router.message(RegisterMessage.comment_handle)
+async def process_comment_kb(message: Message, state: FSMContext):
+    msg_id = await state.get_data()
+    if message.text:
         await save_comment_action(botMessage.user_token, {
             'object': botMessage.objectMessage['id'],
-            'comment': call.message.text
+            'comment': message.text
         })
-        await call.answer('Comment was send Banshee')
-
-
-
-
+        await message.answer('Comment was sent Banshee')
+        await bot.delete_message(chat_id=message.chat.id, message_id=msg_id['comment_msg_id'])
+        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)

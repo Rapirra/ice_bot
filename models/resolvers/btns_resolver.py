@@ -44,8 +44,5 @@ async def save_comment_action(user_token, btn_event):
             'comment': btn_event['comment']
         }
 
-        result = await session.execute(mutation, variable_values=params)
-        print('save_comment_action', params)
-        print('save_comment_action', params)
+        await session.execute(mutation, variable_values=params)
         botMessage.add_delivery_btns(None)
-        print('botMessage', botMessage.deliveryBtns)

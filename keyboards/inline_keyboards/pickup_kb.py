@@ -28,7 +28,7 @@ def build_first_kb(obj) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     for item in obj:
         print('item', item)
-        btn_text = dictObj[item['type']]['name']
+        btn_text = dictObj[item['key']]['name']
         event_value = dictObj[item['key']]
         call_back = event_value['id'] if event_value['id'] is not None else '1'
         print(btn_text, call_back)
@@ -40,10 +40,4 @@ def build_first_kb(obj) -> InlineKeyboardMarkup:
     return builder.as_markup()
 
 
-def build_comment_kb() -> InlineKeyboardMarkup:
-    builder = InlineKeyboardBuilder()
-    builder.add(InlineKeyboardButton(
-        text='Enter comment to order',
-        callback_data='comment'))
 
-    return builder.as_markup()
