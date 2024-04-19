@@ -26,10 +26,10 @@ async def initialize_auth(user_token):
                 response = result['me']
                 botMessage.add_user_me(response)
             if not transport:
-                return "Initialization failed by AIOHTTPTransport none"
+                return "Initialization failed"
             return "Initialization successful, Hello " + botMessage.user_me['name']
         except Exception as e:
-            return "Initialization failed by WebsocketsTransport"
+            return "Initialization failed"
     else:
         return "User token is empty"
 
@@ -50,7 +50,7 @@ async def initialize_graphql(user_token, chat_id):
                 return None
             await listen_for_orders(transport, chat_id)
         except Exception as e:
-            return "Initialization failed by WebsocketsTransport"
+            return "Initialization failed"
     else:
         return "User token is empty"
 

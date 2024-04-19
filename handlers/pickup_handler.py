@@ -1,5 +1,5 @@
 from aiogram import Router, F
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 
@@ -22,20 +22,11 @@ async def process_start_command(message: Message, state: FSMContext):
 async def extract_data(message: Message, state: FSMContext):
     await state.update_data(user_token=message.text)
     botMessage.adduser_token(message.text)
-    await state.set_state(RegisterMessage.chat_id)
-    await state.update_data(chat=message.chat.id)
     if botMessage.user_token:
         result = await initialize_auth(message.text)
         await message.answer(text=result)
-    await state.set_state(RegisterMessage.user_socket_me)
-
-
-@router.message(RegisterMessage.user_socket_me)
-async def connect_websocket(state: FSMContext, message: Message):
-    await message.answer('hope')
-    user_data = await state.get_data()
-    print('user_data', user_data)
-    await initialize_graphql(user_data['user_token'], message.chat.id)
+        if result:
+            await initialize_graphql(message.text, message.chat.id)
     await state.set_state(RegisterMessage.comment_request)
 
 
