@@ -20,18 +20,16 @@ dictObj = {
     8: {'name': 'client-cancel', 'event': 9, 'color': '#CC3333', 'id': '8', 'key': '8'},
     9: {'name': 'complete-delivery', 'event': 11, 'color': '#3096CF', 'id': '9', 'key': '9'},
     10: {'name': 'complete-pickup', 'event': 8, 'color': '#3096CF', 'id': '10', 'key': '10'},
-    11: {'name': 'complete-pickup', 'event': 8, 'color': '#3096CF', 'id': '11', 'key': '11'}
+    11: {'name': 'payment', 'event': 8, 'color': '#3096CF', 'id': '11', 'key': '11'}
 }
 
 
 def build_first_kb(obj) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     for item in obj:
-        print('item', item)
-        btn_text = dictObj[item['key']]['name']
-        event_value = dictObj[item['key']]
-        call_back = event_value['id'] if event_value['id'] is not None else '1'
-        print(btn_text, call_back)
+        btn_text = item['type']
+        call_back = item['key'] if item['key'] is not None else '1'
+        print('call_back', call_back)
         builder.add(InlineKeyboardButton(
             text=btn_text,
             callback_data=PickupCbData(action=call_back, btn_text=btn_text, call_back=call_back).pack()

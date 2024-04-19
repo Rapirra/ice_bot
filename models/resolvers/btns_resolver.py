@@ -6,7 +6,6 @@ from models.queries.queries import btnMutation, commentMutation
 
 
 async def save_btn_action(user_token, btn_event):
-    print('user_token', user_token)
     transport = AIOHTTPTransport(
         url='ws://localhost/graphql',
         headers={'Authorization': user_token}
@@ -20,14 +19,13 @@ async def save_btn_action(user_token, btn_event):
             'order': btn_event['order'],
             'button': int(btn_event['button'])
         }
-
         result = await session.execute(mutation, variable_values=params)
         btns = result['deliveryButton']
+        botMessage.add_delivery_btns()
         botMessage.add_delivery_btns(btns)
 
 
 async def save_comment_action(user_token, btn_event):
-    print('user_token', user_token)
     transport = AIOHTTPTransport(
         url='ws://localhost/graphql',
         headers={'Authorization': user_token}

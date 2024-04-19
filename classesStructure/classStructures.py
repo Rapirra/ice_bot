@@ -19,6 +19,11 @@ class BotMessage:
     def add_delivery_btns(self, delivery_btns):
         self.deliveryBtns = delivery_btns
 
+    def clear(self):
+        self.objectMessage = {}
+        self.deliveryBtns = None
+        self.user_me = {}
+
 
 class RegisterMessage(StatesGroup):
     user_token = State()

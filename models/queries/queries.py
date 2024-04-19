@@ -4,7 +4,8 @@ subQuery = """
     deliveryBtns {
       id
       type
-      event
+      frontEvent
+      backEvent
       key
       color
     }
@@ -34,11 +35,12 @@ subQuery = """
 btnMutation = """
 mutation DeliveryButton($order: Float, $button: Float) {
   deliveryButton(order: $order, button: $button) {
-    id
-      type
-      event
-      key
-      color
+   id
+    type
+    frontEvent
+    backEvent
+    key
+    color
   }
 }
 """
@@ -59,6 +61,7 @@ query Query {
   }
 }
 """
+
 
 
 

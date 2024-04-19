@@ -8,3 +8,5 @@ async def callBot(obj, chat_id, delivery_btns):
         await bot.send_message(chat_id=chat_id, text="Order has been closed")
     else:
         await bot.send_message(chat_id=chat_id, text=obj, reply_markup=build_first_kb(delivery_btns))
+
+
