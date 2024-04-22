@@ -23,6 +23,7 @@ async def process_start_command(message: Message, state: FSMContext):
 async def extract_data(message: Message, state: FSMContext):
     await state.update_data(user_token=message.text)
     botMessage.clear()
+    # message.from_user.id
     botMessage.adduser_token(message.text)
     try:
         result = await establish_http_connection(message.text)
@@ -31,8 +32,7 @@ async def extract_data(message: Message, state: FSMContext):
             await state.set_state(RegisterMessage.user_socket_me)
             await initialize_graphql(botMessage.user_token, message.chat.id)
         else:
-            await message.answer("Enter valid token")
-            await state.set_state(RegisterMessage.user_token)
+            raise TransportQueryError
     except Exception as e:
         await message.answer(f"Enter valid token")
         await state.set_state(RegisterMessage.user_token)
@@ -47,13 +47,13 @@ async def extract_data_socket(message: Message, state: FSMContext):
 @router.callback_query(PickupCbData.filter(F.action.in_({'1', '2', '3', '4', '6'})))
 async def process_second_kb(call: CallbackQuery, callback_data: PickupCbData):
     await save_btn_action(botMessage.user_token, {
-        'order': callback_data.order_id,
+        'order': int(callback_data.order_id),
         'button': callback_data.call_back
     })
     await call.answer()
     await call.message.edit_reply_markup(
         text="Your shop actions:",
-        reply_markup=build_first_kb(botMessage.deliveryBtns, callback_data.order_id)
+        reply_markup=build_first_kb(botMessage.deliveryBtns.get(callback_data.order_id), callback_data.order_id)
     )
 
 
@@ -67,7 +67,7 @@ async def process_comment_kb(call: CallbackQuery, callback_data: PickupCbData, s
     botMessage.add_order_related_message(call.message.message_id, callback_data.order_id)
     await state.set_state(RegisterMessage.comment_handle)
     await save_btn_action(botMessage.user_token, {
-        'order': callback_data.order_id,
+        'order': int(callback_data.order_id),
         'button': callback_data.call_back
     })
     sent_message = await call.message.answer('Enter your comment to order')

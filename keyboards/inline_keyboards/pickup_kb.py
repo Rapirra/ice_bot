@@ -27,13 +27,13 @@ dictObj = {
 
 def build_first_kb(obj, order_id) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-    print('obj', obj, order_id )
+    str_order = str(order_id)
     for item in obj:
-        btn_text = item['type']
+        btn_text = dictObj[item['id']]['name']
         event_value = str(item['key'])
         builder.add(InlineKeyboardButton(
             text=btn_text,
-            callback_data=PickupCbData(action=event_value, btn_text=btn_text, call_back=event_value, order_id=order_id).pack()
+            callback_data=PickupCbData(action=event_value, btn_text=btn_text, call_back=event_value, order_id=str_order).pack()
         ))
         builder.adjust(2)
     return builder.as_markup()
