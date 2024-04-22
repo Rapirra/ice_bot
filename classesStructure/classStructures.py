@@ -4,24 +4,39 @@ from aiogram.fsm.state import StatesGroup, State
 class BotMessage:
     user_token = ''
     objectMessage = {}
-    deliveryBtns = None
+    deliveryBtns = {}
     user_me = {}
 
     def adduser_token(self, user_token):
         self.user_token = user_token
 
     def addObjMessage(self, objectMessage):
-        self.objectMessage = objectMessage
+        obj_id = objectMessage['id']
+        found_item = self.objectMessage.get(obj_id)
+        if found_item:
+            self.objectMessage.update({obj_id: objectMessage})
+        else:
+            self.objectMessage[obj_id] = objectMessage
+
+    def getObjMessageById(self, obj_id):
+        return self.objectMessage.get(obj_id)
 
     def add_user_me(self, user_me):
         self.user_me = user_me
 
-    def add_delivery_btns(self, delivery_btns):
-        self.deliveryBtns = delivery_btns
+    def add_delivery_btns(self, delivery_btns, order_id):
+        found_item = self.deliveryBtns.get(order_id)
+        if found_item is not None:
+            self.deliveryBtns.update({order_id: delivery_btns})
+        else:
+            self.deliveryBtns[order_id] = delivery_btns
+
+    def get_delivery_btns(self, order_id):
+        return self.deliveryBtns.get(order_id)
 
     def clear(self):
         self.objectMessage = {}
-        self.deliveryBtns = None
+        self.deliveryBtns = {}
         self.user_me = {}
 
 
@@ -32,6 +47,7 @@ class RegisterMessage(StatesGroup):
     comment_request = State()
     comment_text = State()
     comment_handle = State()
+    order_register_id = State()
 
 
 botMessage = BotMessage()

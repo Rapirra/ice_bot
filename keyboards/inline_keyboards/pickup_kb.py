@@ -7,13 +7,14 @@ class PickupCbData(CallbackData, prefix="pickup"):
     action: str
     btn_text: str
     call_back: str
+    order_id: int
 
 
 dictObj = {
     1: {'name': 'start', 'event': 0, 'color': '#3096CF', 'id': '1', 'key': '1'},
-    2: {'name': 'decline', 'event': 2, 'color': '#808080', 'id': '2', 'key': '2'},
+    2: {'name': 'go-next', 'event': 0, 'color': '#00A329', 'id': '2', 'key': '2'},
     3: {'name': 'defer', 'event': 3, 'color': '#F1B500', 'id': '3', 'key': '3'},
-    4: {'name': 'go-next', 'event': 0, 'color': '#00A329', 'id': '4', 'key': '4'},
+    4: {'name': 'decline', 'event': 2, 'color': '#CC3333', 'id': '4', 'key': '4'},
     5: {'name': 'fix', 'event': 10, 'color': '#808080', 'id': '5', 'key': '5'},
     6: {'name': 'false-alarm', 'event': 10, 'color': '#808080', 'id': '6', 'key': '6'},
     7: {'name': 'defer-decline', 'event': 3, 'color': '#EB9947', 'id': '7', 'key': '7'},
@@ -24,15 +25,15 @@ dictObj = {
 }
 
 
-def build_first_kb(obj) -> InlineKeyboardMarkup:
+def build_first_kb(obj, order_id) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
+    print('obj', obj, order_id )
     for item in obj:
         btn_text = item['type']
-        call_back = item['key'] if item['key'] is not None else '1'
-        print('call_back', call_back)
+        event_value = str(item['key'])
         builder.add(InlineKeyboardButton(
             text=btn_text,
-            callback_data=PickupCbData(action=call_back, btn_text=btn_text, call_back=call_back).pack()
+            callback_data=PickupCbData(action=event_value, btn_text=btn_text, call_back=event_value, order_id=order_id).pack()
         ))
         builder.adjust(2)
     return builder.as_markup()

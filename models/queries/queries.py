@@ -1,14 +1,6 @@
 subQuery = """
-           subscription Subscription {
+     subscription Subscription {
   displayOrderToBot {
-    deliveryBtns {
-      id
-      type
-      frontEvent
-      backEvent
-      key
-      color
-    }
     order {
       id
       name
@@ -27,6 +19,14 @@ subQuery = """
           delivery
         }
       }
+    }
+    deliveryBtns {
+      id
+      type
+      frontEvent
+      backEvent
+      key
+      color
     }
   }
 }
