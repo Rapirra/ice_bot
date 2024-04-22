@@ -6,9 +6,16 @@ class BotMessage:
     objectMessage = {}
     deliveryBtns = {}
     user_me = {}
+    order_related_messages = {}
 
     def adduser_token(self, user_token):
         self.user_token = user_token
+
+    def add_order_related_message(self, message_id, order_id):
+        if order_id in self.order_related_messages:
+            self.order_related_messages[order_id].add(message_id)
+        else:
+            self.order_related_messages[order_id] = {message_id}
 
     def addObjMessage(self, objectMessage):
         obj_id = objectMessage['id']

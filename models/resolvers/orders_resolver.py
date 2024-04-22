@@ -28,15 +28,12 @@ async def listen_for_orders(transport, chat_id):
                     botMessage.addObjMessage(result['displayOrderToBot']['order'])
                 found_btns = botMessage.get_delivery_btns(order_id)
                 implement_btn = result['displayOrderToBot']['deliveryBtns']
-                print(implement_btn, 'implement_btn')
                 if found_btns is None:
                     botMessage.add_delivery_btns(implement_btn, order_id)
-                    print('botMessage.deliveryBtns[order_id]', botMessage.deliveryBtns[order_id])
                 else:
                     set_of_sets = {frozenset(d.items()) for d in found_btns}
                     set_of_dict = {frozenset(v.items()) for v in implement_btn}
                     if set_of_dict != set_of_sets:
-                        print(set_of_dict != set_of_sets, set_of_dict == set_of_sets)
                         botMessage.add_delivery_btns(implement_btn, order_id)
                 if found_item is None or found_btns is not None:
                     await callBot(text_msg, chat_id, botMessage.deliveryBtns[order_id], order_id)
