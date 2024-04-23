@@ -45,6 +45,7 @@ class BotMessage:
         self.objectMessage = {}
         self.deliveryBtns = {}
         self.user_me = {}
+        self.order_related_messages = {}
 
 
 class RegisterMessage(StatesGroup):

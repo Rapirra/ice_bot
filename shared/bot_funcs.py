@@ -12,3 +12,7 @@ async def callBot(obj, chat_id, delivery_btns, order_id):
         botMessage.add_order_related_message(message.message_id, order_id)
 
 
+async def delete_msgs(order_msgs, chat_id):
+    for order_msg_id in order_msgs:
+        await bot.delete_message(chat_id=chat_id, message_id=order_msg_id)
+

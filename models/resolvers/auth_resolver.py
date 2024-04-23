@@ -3,7 +3,6 @@ from gql.transport.aiohttp import AIOHTTPTransport
 from gql.transport.exceptions import TransportQueryError
 from gql.transport.websockets import WebsocketsTransport
 
-from bot import bot
 from classesStructure.classStructures import botMessage
 from models.queries.queries import meQuery
 from models.resolvers.orders_resolver import listen_for_orders
@@ -14,7 +13,8 @@ client = None
 async def establish_http_connection(user_token):
     try:
         transport = AIOHTTPTransport(
-            url='ws://localhost/graphql',
+            # url='ws://localhost/graphql',
+            url='wss://api.iceberg-crm.kz/graphql',
             headers={'Authorization': user_token}
         )
         return await initialize_auth(transport)
@@ -40,7 +40,6 @@ async def initialize_auth(transport):
             query = gql(meQuery)
             result = await session.execute(query)
             response = result['me']
-            botMessage.add_user_me({})
             botMessage.add_user_me(response)
         return "Initialization successful, Hello " + botMessage.user_me['name']
     except TransportQueryError as e:
@@ -59,7 +58,8 @@ async def initialize_auth(transport):
 async def initialize_graphql(user_token, chat_id):
     try:
         transport = WebsocketsTransport(
-            url='ws://localhost/graphql',
+            # url='ws://localhost/graphql',
+            url='wss://api.iceberg-crm.kz/graphql',
             init_payload={
                 'Authorization': user_token
             },

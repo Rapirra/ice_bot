@@ -7,7 +7,8 @@ from models.queries.queries import btnMutation, commentMutation
 
 async def save_btn_action(user_token, btn_event):
     transport = AIOHTTPTransport(
-        url='ws://localhost/graphql',
+        # url='ws://localhost/graphql',
+        url='wss://api.iceberg-crm.kz/graphql',
         headers={'Authorization': user_token}
     )
     async with Client(
@@ -26,7 +27,8 @@ async def save_btn_action(user_token, btn_event):
 
 async def save_comment_action(user_token, btn_event):
     transport = AIOHTTPTransport(
-        url='ws://localhost/graphql',
+        # url='ws://localhost/graphql',
+        url='wss://api.iceberg-crm.kz/graphql',
         headers={'Authorization': user_token}
     )
     async with Client(

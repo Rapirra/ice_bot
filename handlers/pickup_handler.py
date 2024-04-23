@@ -9,6 +9,7 @@ from classesStructure.classStructures import botMessage, RegisterMessage
 from keyboards.inline_keyboards.pickup_kb import PickupCbData, build_first_kb
 from models.resolvers.auth_resolver import initialize_graphql, establish_http_connection
 from models.resolvers.btns_resolver import save_btn_action, save_comment_action
+from shared.bot_funcs import delete_msgs
 
 router = Router(name=__name__)
 
@@ -86,7 +87,5 @@ async def process_comment_kb(message: Message, state: FSMContext):
         })
         botMessage.add_order_related_message(message.message_id, msg_id['order_register_id'])
         order_msgs = botMessage.order_related_messages.get(msg_id['order_register_id'])
-        for order_msg_id in order_msgs:
-            await bot.delete_message(chat_id=message.chat.id, message_id=order_msg_id)
-        await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
+        await delete_msgs(order_msgs,message.chat.id)
         await state.clear()
