@@ -3,21 +3,20 @@ from gql.transport.aiohttp import AIOHTTPTransport
 from gql.transport.exceptions import TransportQueryError
 from gql.transport.websockets import WebsocketsTransport
 
-from classesStructure.classStructures import botMessage
 from models.queries.queries import meQuery
 from models.resolvers.orders_resolver import listen_for_orders
 
 client = None
 
 
-async def establish_http_connection(user_token):
+async def establish_http_connection(user_token, bot_msg_class):
     try:
         transport = AIOHTTPTransport(
-            # url='ws://localhost/graphql',
-            url='wss://api.iceberg-crm.kz/graphql',
+            url='ws://localhost/graphql',
+            # url='wss://api.iceberg-crm.kz/graphql',
             headers={'Authorization': user_token}
         )
-        return await initialize_auth(transport)
+        return await initialize_auth(transport, bot_msg_class)
     except TransportQueryError as e:
         if e.errors:
             for error in e.errors:
@@ -31,7 +30,7 @@ async def establish_http_connection(user_token):
         print("An unexpected error occurred:", e)
 
 
-async def initialize_auth(transport):
+async def initialize_auth(transport, bot_msg_class):
     try:
         async with Client(
                 transport=transport,
@@ -40,8 +39,9 @@ async def initialize_auth(transport):
             query = gql(meQuery)
             result = await session.execute(query)
             response = result['me']
-            botMessage.add_user_me(response)
-        return "Initialization successful, Hello " + botMessage.user_me['name']
+            bot_msg_class.add_user_me(response)
+            print(bot_msg_class.user_me, "user_mer")
+        return "Initialization successful, Hello " + bot_msg_class.user_me['name']
     except TransportQueryError as e:
         if e.errors:
             for error in e.errors:
@@ -55,11 +55,11 @@ async def initialize_auth(transport):
         print("An unexpected error occurred:", e)
 
 
-async def initialize_graphql(user_token, chat_id):
+async def initialize_graphql(user_token, chat_id, bot_msg_class):
     try:
         transport = WebsocketsTransport(
-            # url='ws://localhost/graphql',
-            url='wss://api.iceberg-crm.kz/graphql',
+            url='ws://localhost/graphql',
+            # url='wss://api.iceberg-crm.kz/graphql',
             init_payload={
                 'Authorization': user_token
             },
@@ -69,7 +69,8 @@ async def initialize_graphql(user_token, chat_id):
         )
         if not transport:
             return None
-        await listen_for_orders(transport, chat_id)
+        print(transport, 'transport')
+        await listen_for_orders(transport, chat_id, bot_msg_class)
     except TransportQueryError as e:
         if e.errors:
             for error in e.errors:

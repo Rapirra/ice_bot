@@ -1,5 +1,5 @@
 subQuery = """
-     subscription Subscription {
+    subscription Subscription {
   displayOrderToBot {
     order {
       id
@@ -19,6 +19,13 @@ subQuery = """
           delivery
         }
       }
+      delivery {
+        delivery {
+          id
+        }
+      }
+      previousDelivery
+      previousPickup
     }
     deliveryBtns {
       id

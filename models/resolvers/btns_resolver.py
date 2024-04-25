@@ -1,14 +1,12 @@
 from gql import Client, gql
 from gql.transport.aiohttp import AIOHTTPTransport
-
-from classesStructure.classStructures import botMessage
 from models.queries.queries import btnMutation, commentMutation
 
 
-async def save_btn_action(user_token, btn_event):
+async def save_btn_action(user_token, btn_event, bot_msg_class):
     transport = AIOHTTPTransport(
-        # url='ws://localhost/graphql',
-        url='wss://api.iceberg-crm.kz/graphql',
+        url='ws://localhost/graphql',
+        # url='wss://api.iceberg-crm.kz/graphql',
         headers={'Authorization': user_token}
     )
     async with Client(
@@ -22,13 +20,13 @@ async def save_btn_action(user_token, btn_event):
         }
         result = await session.execute(mutation, variable_values=params)
         btns = result['deliveryButton']
-        botMessage.add_delivery_btns(btns, btn_event['order'])
+        bot_msg_class.add_delivery_btns(btns, btn_event['order'])
 
 
 async def save_comment_action(user_token, btn_event):
     transport = AIOHTTPTransport(
-        # url='ws://localhost/graphql',
-        url='wss://api.iceberg-crm.kz/graphql',
+        url='ws://localhost/graphql',
+        # url='wss://api.iceberg-crm.kz/graphql',
         headers={'Authorization': user_token}
     )
     async with Client(
