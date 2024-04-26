@@ -33,7 +33,7 @@ async def listen_for_orders(transport, chat_id, bot_msg_class):
                         if set_of_dict != set_of_sets:
                             bot_msg_class.add_delivery_btns(implement_btn, order_id)
                     if found_item is None or found_btns is not None:
-                        await callBot(text_msg, chat_id, bot_msg_class.deliveryBtns[order_id], order_id, bot_msg_class)
+                        await callBot(text_msg, chat_id, bot_msg_class.deliveryBtns[order_id], order_id)
                 else:
                     order_msgs = bot_msg_class.order_related_messages.get(order_id)
                     await delete_msgs(order_msgs, chat_id, order_id)

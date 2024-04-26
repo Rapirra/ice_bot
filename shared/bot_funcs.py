@@ -2,10 +2,11 @@ from bot import bot
 from keyboards.inline_keyboards.pickup_kb import build_first_kb
 from aiogram.exceptions import TelegramBadRequest
 
+from lib.TelegramBotCache import TelegramBotCache
 
-async def callBot(obj, chat_id, delivery_btns, order_id, bot_msg_class):
-    print(obj, 'obj')
-    print('bot_msg_class', bot_msg_class)
+
+async def callBot(obj, chat_id, delivery_btns, order_id):
+    bot_msg_class = TelegramBotCache(chat_id)
     if bot_msg_class is not None:
         if len(delivery_btns) == 0:
             message = await bot.send_message(chat_id=chat_id, text="Order has been closed")

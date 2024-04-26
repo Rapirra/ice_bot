@@ -40,7 +40,6 @@ async def initialize_auth(transport, bot_msg_class):
             result = await session.execute(query)
             response = result['me']
             bot_msg_class.add_user_me(response)
-            print(bot_msg_class.user_me, "user_mer")
         return "Initialization successful, Hello " + bot_msg_class.user_me['name']
     except TransportQueryError as e:
         if e.errors:
@@ -69,7 +68,6 @@ async def initialize_graphql(user_token, chat_id, bot_msg_class):
         )
         if not transport:
             return None
-        print(transport, 'transport')
         await listen_for_orders(transport, chat_id, bot_msg_class)
     except TransportQueryError as e:
         if e.errors:

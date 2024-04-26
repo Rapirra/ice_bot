@@ -5,6 +5,5 @@ from config.config import load_config, Config
 
 config: Config = load_config()
 bot = Bot(token=config.tg_bot)
-
 dispatcher = Dispatcher()
 logging.basicConfig(level=logging.INFO)
