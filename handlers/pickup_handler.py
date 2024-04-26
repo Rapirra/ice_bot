@@ -91,5 +91,6 @@ async def process_comment_kb(message: Message, state: FSMContext):
         })
         cache.add_order_related_message(message.message_id, msg_id['order_register_id'])
         order_msgs = cache.order_related_messages.get(msg_id['order_register_id'])
-        await delete_msgs(order_msgs=order_msgs, chat_id=message.chat.id, order_id=msg_id['order_register_id'])
+        await delete_msgs(order_msgs=order_msgs, chat_id=message.chat.id)
+        cache.delete_msg_from_dict(msg_id['order_register_id'])
         await state.clear()

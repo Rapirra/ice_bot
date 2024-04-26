@@ -36,7 +36,7 @@ async def listen_for_orders(transport, chat_id, bot_msg_class):
                         await callBot(text_msg, chat_id, bot_msg_class.deliveryBtns[order_id], order_id)
                 else:
                     order_msgs = bot_msg_class.order_related_messages.get(order_id)
-                    await delete_msgs(order_msgs, chat_id, order_id)
+                    await delete_msgs(order_msgs, chat_id)
                     bot_msg_class.delete_msg_from_dict(order_id)
 
 
