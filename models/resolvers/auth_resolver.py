@@ -3,6 +3,7 @@ from gql.transport.aiohttp import AIOHTTPTransport
 from gql.transport.exceptions import TransportQueryError
 from gql.transport.websockets import WebsocketsTransport
 
+from bot import url_graphql
 from models.queries.queries import meQuery
 from models.resolvers.orders_resolver import listen_for_orders
 
@@ -12,8 +13,7 @@ client = None
 async def establish_http_connection(user_token, bot_msg_class):
     try:
         transport = AIOHTTPTransport(
-            url='ws://localhost/graphql',
-            # url='wss://api.iceberg-crm.kz/graphql',
+            url=url_graphql,
             headers={'Authorization': user_token}
         )
         return await initialize_auth(transport, bot_msg_class)
@@ -57,8 +57,7 @@ async def initialize_auth(transport, bot_msg_class):
 async def initialize_graphql(user_token, chat_id, bot_msg_class):
     try:
         transport = WebsocketsTransport(
-            url='ws://localhost/graphql',
-            # url='wss://api.iceberg-crm.kz/graphql',
+            url=url_graphql,
             init_payload={
                 'Authorization': user_token
             },
@@ -80,6 +79,3 @@ async def initialize_graphql(user_token, chat_id, bot_msg_class):
             print("Unknown GraphQL error occurred:", e)
     except Exception as e:
         print("An unexpected error occurred:", e)
-
-# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiMjhlYTE1YzAtYzllZi00Y2JiLWE5OGEtMTZjYTIyZmY5MzViIiwicHJlZml4IjoidGVzdCIsImlkIjoxLCJpYXQiOjE3MTI1NjIzMjZ9.sxHdOVAZwHrxVsYw34JR4NG0JzaKuyvUoOaqbIT5yLo
-# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiOGRjNzJiZTktYmQ5OS00NzUxLTgxODAtOGZmM2YxYWJlYTJkIiwicHJlZml4IjoidGVzdCIsImlkIjozLCJpYXQiOjE3MTAxNTU3OTN9.kzdbjajZqpjnB2SmIN-5shxWcyLrdnWm8KjE6g0XV9I

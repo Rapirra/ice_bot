@@ -32,17 +32,9 @@ async def construct_msg(result):
     return text_msg
 
 
-async def delete_msgs(order_msgs, chat_id,  order_id):
+async def delete_msgs(order_msgs, chat_id):
     for order_msg_id in order_msgs:
-        # print('bot_msg_class', bot_msg_class)
-        print('order_msg_id', order_msg_id)
         try:
             await bot.delete_message(chat_id=chat_id, message_id=order_msg_id)
-            # await bot_msg_class.delete_msg_from_dict(order_id, order_msg_id)
-            # print('bot_msg_class', bot_msg_class.order_related_messages)
         except TelegramBadRequest:
             print(f"Message with ID {order_msg_id} not found. It may have been deleted already or doesn't exist.")
-
-        # if bot_msg_class is not None:
-             # else:
-        #     print('here delete_msgs')
