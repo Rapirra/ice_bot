@@ -1,13 +1,6 @@
 subQuery = """
-           subscription Subscription {
+    subscription Subscription {
   displayOrderToBot {
-    deliveryBtns {
-      id
-      type
-      event
-      key
-      color
-    }
     order {
       id
       name
@@ -26,6 +19,21 @@ subQuery = """
           delivery
         }
       }
+      delivery {
+        delivery {
+          id
+        }
+      }
+      previousDelivery
+      previousPickup
+    }
+    deliveryBtns {
+      id
+      type
+      frontEvent
+      backEvent
+      key
+      color
     }
   }
 }
@@ -34,11 +42,12 @@ subQuery = """
 btnMutation = """
 mutation DeliveryButton($order: Float, $button: Float) {
   deliveryButton(order: $order, button: $button) {
-    id
-      type
-      event
-      key
-      color
+   id
+    type
+    frontEvent
+    backEvent
+    key
+    color
   }
 }
 """
@@ -59,6 +68,7 @@ query Query {
   }
 }
 """
+
 
 
 
